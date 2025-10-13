@@ -80,3 +80,45 @@ def handle_zero_division_error(error):
     print(error)
     app.logger.exception('trace zero')
     return f'never divide by zero', 400
+
+
+
+
+###############################Кастомные вьюшки блога
+from socket import gethostname
+# Моя страница
+# Мои друзья
+# Мои фото
+# Выйти
+
+@app.route(f'/start')
+def login():
+    return f'Стартовая страница'
+
+@app.route(f'/login')
+def login():
+    return f'Тут будет страница авторизации'
+
+
+@app.route(f'/reg/')
+def login():
+    return f'Тут будет страница регистрации'
+
+
+@app.route(f'/main_menu/')
+def main_menu():
+    name_computer = gethostname()
+    return f'Привет {name_computer}! Тут будет меню блога с различным редиректами'
+
+@app.route(f'/my_page')
+def my_page():
+    return f'Тут будет страница с основной информацией пользователя'
+
+
+@app.route(f'/friends')
+def friends():
+    return f'тут будет список друзей пользователя'
+
+@app.route(f'/photo')
+def photo():
+    return f'тут будет страница с фотками'
