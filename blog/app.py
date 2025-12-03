@@ -5,11 +5,13 @@ from time import time
 from werkzeug.exceptions import BadRequest
 from .views.users import users_app
 from .views.articles import articles_app
+from .views.auth import auth_app
+
 from .models.database import *
 
 from .commands import init_db_command, create_users_command,drop_db_command, check_db
 
-
+from .extension import login_manager
 import os
 
 
@@ -20,9 +22,22 @@ def create_app() -> Flask:
     app = Flask(__name__) # экземпляр приложения
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    app.config["SECRET_KEY"]='abcd'
     db.init_app(app) # инициализация бд
+    login_manager.init_app(app)
 
     from .models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.filter_by(id=user_id).one_or_none()
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        return redirect(url_for('auth_app.login'))
+
+
+
+
     _add_base_route(app)
     _add_context_processor(app)
     _add_blueprints(app)
@@ -39,7 +54,7 @@ def _add_base_route(app):
 
     @app.route('/my_page', endpoint='my_page')
     def my_page():
-        return render_template('index.html')
+        return render_template('my_page.html',)
 
 
 
@@ -63,7 +78,20 @@ def _add_context_processor(app):
                 'label': 'Articles',
                 'active_endpoints': ['articles_app.list',
                                      'articles_app.details']
+            },
+            {
+                'endpoint': 'auth_app.login',
+                'label': 'Login',
+                'active_endpoint': 'auth_app.login',
+
+            },
+
+            {
+                'endpoint': 'auth_app.logout',
+                'label': 'Logout',
+                'active_endpoint': 'auth_app.logout'
             }
+
         ]
         return {'nav_items': nav_items}
 
@@ -73,6 +101,7 @@ def _add_blueprints(app) -> None:
     app.register_blueprint(users_app, url_prefix='/users')  # все url блупринта будут начинаться на то,
     # что мы кидаем в url_prefix
     app.register_blueprint(articles_app, url_prefix='/articles')
+    app.register_blueprint(auth_app, url_prefix='/authentication')
 
 
 def _add_commands(app) -> None:
