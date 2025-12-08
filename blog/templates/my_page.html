@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}
+Index Page
+{% endblock %}
+
+{% block body %}
+    {% if current_user.is_authenticated %}
+<h1>А это личная страница! (тестово)! Привет {{ current_user.username }}</h1>
+    {% else %}
+    <h1> Залогиньтесь! </h1>
+    {% endif %}
+    <div>
+    <a href="{{ url_for('auth_app.secret') }}">secret</a>
+    </div>
+{% endblock %}
