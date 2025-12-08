@@ -30,7 +30,7 @@ def login():
 
 
 
-@auth_app.route('/logout/')
+@auth_app.route('/logout/', endpoint='logout')
 @login_required # доступ только для авторизованных
 def logout():
     logout_user()

@@ -28,7 +28,7 @@ def create_users_command():
         names_users = ['admin', 'james', 'vitek']
         for name_user in names_users:
             if name_user == 'admin':
-                user = User(username=name_user, is_staff = True)
+                user = User(username='admin', is_staff = True)
             else:
                 user = User(username = name_user, name = f'{name_user} human')
 
