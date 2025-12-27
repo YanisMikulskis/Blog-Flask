@@ -1,6 +1,6 @@
 import logging
 
-from flask import Flask, request, g, render_template
+from flask import Flask, request, g, render_template, redirect, url_for
 from time import time
 from werkzeug.exceptions import BadRequest
 from .views.users import users_app
@@ -34,9 +34,6 @@ def create_app() -> Flask:
     @login_manager.unauthorized_handler
     def unauthorized():
         return redirect(url_for('auth_app.login'))
-
-
-
 
     _add_base_route(app)
     _add_context_processor(app)
