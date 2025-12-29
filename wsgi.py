@@ -1,7 +1,7 @@
 from blog.app import create_app, db
 from blog.models.user import User
 
-
+import os
 
 # @app.cli.command('init-db')
 # def init_db():
@@ -26,12 +26,16 @@ from blog.models.user import User
 
 
 
+
 def main(host, debug):
     app = create_app()
+    is_docker = os.environ.get('IS_DOCKER')
+    print(f'docker = {is_docker}')
+    port = 5001 if not int(is_docker) else 5002
     app.run(
         host=host,
         debug=debug,
-        port=5001 # 5000-й пор занят службами MacOS
+        port=port # 5000-й порт занят службами MacOS
     )
 
 if __name__ == '__main__':

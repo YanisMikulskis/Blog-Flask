@@ -17,12 +17,14 @@ import os
 
 
 
-
 def create_app() -> Flask:
     app = Flask(__name__) # экземпляр приложения
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["SECRET_KEY"]='abcd'
+    cfg_name = os.environ.get('CONFIG_NAME')
+    app.config.from_object(f'blog.configs.{cfg_name}')
+    print(f'cf = {cfg_name}')
+    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
+    # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    # app.config["SECRET_KEY"]='abcd'
     db.init_app(app) # инициализация бд
     login_manager.init_app(app)
 
@@ -46,6 +48,7 @@ def create_app() -> Flask:
 
 def _add_base_route(app):
     @app.route('/', endpoint='home')
+
     def home_page():
         return render_template('home_page.html')
 
