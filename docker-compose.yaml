@@ -1,0 +1,66 @@
+#services:
+#  flaskapp:
+#    build:
+#      dockerfile: ./Dockerfile
+#      context: .
+#    environment:
+#      SQLALCHEMY_DATABASE_URI: postgresql://user:password@pg:5432/blog
+#      CONFIG_NAME: DevConfig
+#      IS_DOCKER: 1
+#    volumes:
+#      - ./blog:/app/blog
+#      - ./migrations:/app/migrations
+#      - ./manage_create_tables_for_pg.py:/app/manage_create_tables_for_pg.py
+#    ports:
+#      - 5002:5002
+#    depends_on:
+#      - pg
+#    command: >
+#      sh -c "
+#      flask db upgrade &&
+#      python wsgi.py
+#      "
+#  pg:
+#    image: postgres:12.7-alpine
+#    environment:
+#      POSTGRES_DB: blog
+#      POSTGRES_USER: user
+#      POSTGRES_PASSWORD: password
+#      PGDATA: /var/lib/postgresql/data/pgdata
+#    healthcheck:
+#      test: ['CMD-SHELL', 'pg_isready -U user -d blog']
+#      interval: 5s
+#      timeout: 5s
+#      retries: 5
+##    volumes:
+##      - ${HOME}/dbs/flask-lesson/pgdata-dev:/var/lib/postgresql/data/pgdata
+##    ports:
+##      - 5432:5432
+
+
+services:
+  app:
+    build:
+      dockerfile: ./Dockerfile
+      context: .
+    environment:
+      SQLALCHEMY_DATABASE_URI: postgresql://user:password@pg:5432/blog
+      CONFIG_NAME: DevConfig
+      IS_DOCKER: 1
+    volumes:
+      - ./blog:/app/blog
+    ports:
+      - 5002:5002
+    depends_on:
+      - pg
+  pg:
+    image: postgres:12
+    environment:
+      POSTGRES_DB: blog
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ${HOME}/dbs/flask-lesson/pgdata-dev:/var/lib/postgresql/data/pgdata
+    ports:
+      - 5432:5432

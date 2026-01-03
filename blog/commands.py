@@ -1,7 +1,7 @@
 import sqlalchemy.exc
 from flask.cli import with_appcontext
 import click
-from .models.database import *
+from .extension import db
 from .models import User
 
 

@@ -7,11 +7,12 @@ from .views.users import users_app
 from .views.articles import articles_app
 from .views.auth import auth_app
 
-from .models.database import *
+# from .models.database import *
 
 from .commands import init_db_command, create_users_command,drop_db_command, check_db
 
-from .extension import login_manager
+from .extension import login_manager, db, migrate
+from flask_migrate import Migrate
 import os
 
 
@@ -19,24 +20,25 @@ import os
 
 def create_app() -> Flask:
     app = Flask(__name__) # экземпляр приложения
-    cfg_name = os.environ.get('CONFIG_NAME')
-    app.config.from_object(f'blog.configs.{cfg_name}')
+    is_docker = os.environ.get('IS_DOCKER')
+    if is_docker == '0':
+        cfg_name = 'DevConfig'
+    else:
+        cfg_name = os.environ.get('CONFIG_NAME')
     print(f'cf = {cfg_name}')
+    app.config.from_object(f'blog.configs.{cfg_name}')
+
+
+    print(f'cf = {cfg_name}')
+    print(f'SQLALCHEMY_DATABASE_URI = {os.environ.get('SQLALCHEMY_DATABASE_URI')}')
     # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
     # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     # app.config["SECRET_KEY"]='abcd'
-    db.init_app(app) # инициализация бд
-    login_manager.init_app(app)
 
-    from .models import User
 
-    @login_manager.user_loader
-    def load_user(user_id):
-        return User.query.filter_by(id=user_id).one_or_none()
-    @login_manager.unauthorized_handler
-    def unauthorized():
-        return redirect(url_for('auth_app.login'))
 
+
+    _add_extensions(app)
     _add_base_route(app)
     _add_context_processor(app)
     _add_blueprints(app)
@@ -44,11 +46,24 @@ def create_app() -> Flask:
     return app
 
 
+def _add_extensions(app):
+    db.init_app(app)
+    migrate.init_app(app, db, compare_type=True)
+    login_manager.init_app(app)
+    from .models import User
+
+    @login_manager.user_loader
+    def load_user(user_id):
+        return User.query.filter_by(id=user_id).one_or_none()
+
+    @login_manager.unauthorized_handler
+    def unauthorized():
+        return redirect(url_for('auth_app.login'))
+
 
 
 def _add_base_route(app):
     @app.route('/', endpoint='home')
-
     def home_page():
         return render_template('home_page.html')
 

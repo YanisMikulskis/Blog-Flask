@@ -1,0 +1,4 @@
+1) flask init db
+2) flask db migrate
+3) flask db upgrade
+4) flask db revision -m 'empty migration' - принудительно создать пустую миграцию для данных
