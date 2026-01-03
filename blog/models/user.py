@@ -1,7 +1,7 @@
 from typing import Optional
 import sqlalchemy as sa
 import sqlalchemy.orm as so
-from .database import db
+from blog.extension import db
 from flask_login import UserMixin
 
 
@@ -10,6 +10,7 @@ class User(db.Model, UserMixin):
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
     username: so.Mapped[str] = so.mapped_column(sa.String(20), unique=True, nullable=False)
     name: so.Mapped[str] = so.mapped_column(sa.String(30), default='no name')
+    email: so.Mapped[str] = so.mapped_column(sa.String(50), default='no mail', nullable=True)
     is_staff: so.Mapped[bool] = so.mapped_column(nullable=False, default=False)
     password_hash: so.Mapped[Optional[str]] = so.mapped_column(sa.String(256))
 
