@@ -1,12 +1,12 @@
 from blog.app import create_app
+from check_docker import is_docker
 import os
 
 
 def main(host, debug):
     app = create_app()
-    is_docker = os.environ.get('IS_DOCKER')
-    print(f'docker = {is_docker}')
-    port = 5001 if not int(is_docker) else 5002
+    port = 5001 if not is_docker else 5002
+
     app.run(
         host=host,
         debug=debug,

@@ -1,42 +1,29 @@
-import logging
+from flask import Flask, render_template, redirect, url_for
 
-from flask import Flask, request, g, render_template, redirect, url_for
-from time import time
-from werkzeug.exceptions import BadRequest
 from .views.users import users_app
 from .views.articles import articles_app
 from .views.auth import auth_app
 
-# from .models.database import *
-
 from .commands import init_db_command, create_users_command,drop_db_command, check_db
 
 from .extension import login_manager, db, migrate
-from flask_migrate import Migrate
+
+from .security import flask_bcrypt
+
+
 import os
 
+from check_docker import is_docker
 
 
 
 def create_app() -> Flask:
     app = Flask(__name__) # экземпляр приложения
-    is_docker = os.environ.get('IS_DOCKER')
-    if is_docker == '0':
+    if not is_docker:
         cfg_name = 'DevConfig'
     else:
         cfg_name = os.environ.get('CONFIG_NAME')
-    print(f'cf = {cfg_name}')
     app.config.from_object(f'blog.configs.{cfg_name}')
-
-
-    print(f'cf = {cfg_name}')
-    print(f'SQLALCHEMY_DATABASE_URI = {os.environ.get('SQLALCHEMY_DATABASE_URI')}')
-    # app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db.sqlite'
-    # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    # app.config["SECRET_KEY"]='abcd'
-
-
-
 
     _add_extensions(app)
     _add_base_route(app)
@@ -46,10 +33,12 @@ def create_app() -> Flask:
     return app
 
 
+
 def _add_extensions(app):
     db.init_app(app)
     migrate.init_app(app, db, compare_type=True)
     login_manager.init_app(app)
+    flask_bcrypt.init_app(app)
     from .models import User
 
     @login_manager.user_loader
@@ -125,4 +114,5 @@ def _add_commands(app) -> None:
     app.cli.add_command(create_users_command)
     app.cli.add_command(drop_db_command)
     app.cli.add_command(check_db)
+
 app = create_app()
