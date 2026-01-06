@@ -5,18 +5,55 @@ from .extension import db
 from .models import User
 
 
-@click.command('init-db')
+
+
+
+
+
+
+
+
+
+
+
+# @click.command('init-db')
+# @with_appcontext
+#
+# def init_db_command():
+#     '''
+#     Terminal
+#     '''
+#
+#     db.create_all()
+#     print(f'База была пересоздана!')
+
+@click.command('create-admin')
 @with_appcontext
 
-def init_db_command():
+def create_admin():
     '''
-    Terminal
+    Run in your terminal:
+    -> flask create-admin
+    > created admin: <User #1 'admin'>
     '''
+    from blog.models import User
 
-    db.create_all()
-    print(f'База была пересоздана!')
+    admin_user = User(username='admin-yanis', is_staff=True)
+    admin_user.password = '1234567890' # в дальнейшем брать из переменной окружения
 
+    db.session.add(admin_user)
+    db.session.commit()
+    print(f'created admin', admin_user)
 
+@click.command('delete-admin')
+@with_appcontext
+def delete_admin():
+    from blog.models import User
+
+    admin_user = User.query.filter_by(username='admin-yanis').one_or_none()
+    db.session.delete(admin_user)
+    db.session.commit()
+    print(f'admin has been deleted')
 @click.command('create-users')
 @with_appcontext
 
@@ -56,3 +93,5 @@ def check_db():
     table = ins.get_columns('users')
     from .models import User
     print(f'nаблы = {User.query.all()}')
+
+

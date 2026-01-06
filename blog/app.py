@@ -4,7 +4,11 @@ from .views.users import users_app
 from .views.articles import articles_app
 from .views.auth import auth_app
 
-from .commands import init_db_command, create_users_command,drop_db_command, check_db
+from .commands import (create_users_command,
+                       drop_db_command,
+                       check_db,
+                       create_admin,
+                       delete_admin)
 
 from .extension import login_manager, db, migrate
 
@@ -110,9 +114,10 @@ def _add_blueprints(app) -> None:
 
 def _add_commands(app) -> None:
 # вызов команд из commands
-    app.cli.add_command(init_db_command)
+#     app.cli.add_command(init_db_command)
     app.cli.add_command(create_users_command)
     app.cli.add_command(drop_db_command)
     app.cli.add_command(check_db)
-
+    app.cli.add_command(create_admin)
+    app.cli.add_command(delete_admin)
 app = create_app()
