@@ -66,8 +66,10 @@ def create_users_command():
         for name_user in names_users:
             if name_user == 'admin':
                 user = User(username='admin', is_staff = True)
+                user.password = '1'
             else:
                 user = User(username = name_user, name = f'{name_user} human')
+                user.password='1'
 
             db.session.add(user)
         db.session.commit()

@@ -98,6 +98,12 @@ def _add_context_processor(app):
                 'endpoint': 'auth_app.logout',
                 'label': 'Logout',
                 'active_endpoint': 'auth_app.logout'
+            },
+
+            {
+                'endpoint': 'auth_app.register',
+                'label': 'Register',
+                'active_endpoint': 'auth_app.register'
             }
 
         ]

@@ -28,3 +28,16 @@ class RegistrationForm(UserBaseForm):
     )
     confirm = PasswordField('Repeat Password')
     submit = SubmitField('Register')
+
+
+class LoginForm(FlaskForm):
+    username = StringField(
+        'username',
+        [validators.DataRequired()]
+    )
+    password = PasswordField(
+        'Password',
+        [validators.DataRequired()]
+    )
+
+    submit = SubmitField('login')

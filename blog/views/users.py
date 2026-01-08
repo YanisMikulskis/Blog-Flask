@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template
 from werkzeug.exceptions import NotFound
-
+from flask_login import current_user
 from blog.models import User
 
 
@@ -13,8 +13,9 @@ users_app = Blueprint(name='users_app', import_name=__name__)
 
 @users_app.route('/', endpoint='list')
 def users_list():
+
     users = User.query.all()
-    return render_template('users/list.html', users=users)
+    return render_template('users/list.html', users=users,)
 
 @users_app.route('/<int:user_id>/', endpoint='details')
 def user_details(user_id: int):

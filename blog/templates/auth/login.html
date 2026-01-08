@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% from 'macro/formhelpers.html' import render_field %}
 {% block title %}
     LOGIN FORM
 {% endblock %}
@@ -13,17 +13,26 @@
         </div>
     {% endif %}
     <form method="post">
-        <label for="input-username">Login as (username):</label>
-        <input
-                id="input-username"
-                type="text"
-                name="username"
-                password="password"
-                placeholder="guest"
-                required
-        >
-        <button type="submit">Login
-        </button>
+        {{ form.csrf_token() }}
+        {% for field in ['username', 'password'] %}
+            {{ render_field(form[field]) }}
+        {% endfor %}
+
+        <div>
+            {{ form.submit(class='btn btn-primary btn-lg') }}
+        </div>
+{#    #}
+{#        <label for="input-username">Login as (username):</label>#}
+{#        <input#}
+{#                id="input-username"#}
+{#                type="text"#}
+{#                name="username"#}
+{#                password="password"#}
+{#                placeholder="guest"#}
+{#                required#}
+{#        >#}
+{#        <button type="submit">Login#}
+{#        </button>#}
     </form>
 
 

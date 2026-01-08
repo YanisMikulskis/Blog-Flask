@@ -36,7 +36,7 @@ class User(db.Model, UserMixin):
         return self._password
     @password.setter
     def password(self, value):
-        if len(value) < 8:
+        if len(value) < 1:
             raise ValueError(f'Пароль должен быть не менее 8 символов!')
 
         self._password = generate_password_hash(value)
