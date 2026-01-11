@@ -1,8 +1,8 @@
-from typing import Optional
-from xmlrpc.client import Binary
 
 import sqlalchemy as sa
 import sqlalchemy.orm as so
+from sqlalchemy.orm import relationship
+
 from blog.extension import db
 from flask_login import UserMixin
 from flask_bcrypt import check_password_hash, generate_password_hash
@@ -30,6 +30,8 @@ class User(db.Model, UserMixin):
     is_staff: so.Mapped[bool] = so.mapped_column(nullable=False, default=False, server_default=sa.false())
     _password: so.Mapped[bytes] = so.mapped_column(sa.LargeBinary, nullable=True)
 
+
+    author = relationship('Author', uselist=False, back_populates='user')
 
     @property
     def password(self):
