@@ -13,22 +13,22 @@ login_page = 'auth_app.login'
 
 
 
-@auth_app.route('/', endpoint='login', methods=['GET', 'POST'])
-def login():
-    # return 'WIP'
-    if current_user.is_authenticated:
-        return redirect('home')
-    form = LoginForm(request.form)
-
-    if request.method == 'POST' and form.validate_on_submit():
-        user = User.query.filter_by(username=form.username.data).one_or_none()
-        if user is None:
-            return render_template(f'auth/register.html', form=form, error='user not exists')
-        elif not user.validate_password(form.password.data):
-            return render_template(f'auth/register.html', form=form, error='invalid password')
-        login_user(user)
-        redirect(url_for('home'))
-    return render_template(f'auth/register.html', form=form)
+# @auth_app.route('/', endpoint='login', methods=['GET', 'POST'])
+# def login():
+#     # return 'WIP'
+#     if current_user.is_authenticated:
+#         return redirect('home')
+#     form = LoginForm(request.form)
+#
+#     if request.method == 'POST' and form.validate_on_submit():
+#         user = User.query.filter_by(username=form.username.data).one_or_none()
+#         if user is None:
+#             return render_template(f'auth/register.html', form=form, error='user not exists')
+#         elif not user.validate_password(form.password.data):
+#             return render_template(f'auth/register.html', form=form, error='invalid password')
+#         login_user(user)
+#         redirect(url_for('home'))
+#     return render_template(f'auth/register.html', form=form)
 
 
 
@@ -63,7 +63,24 @@ def login_as():
         return redirect(url_for('home'))
     return render_template('auth/login.html', form=form)
 
+@auth_app.route('/', methods=['POST', 'GET'], endpoint='login')
+def login():
 
+
+    form = LoginForm(request.form)
+    if request.method == 'POST':
+        user = User.query.filter_by(username=form.username.data).one_or_none()
+
+        if user is None:
+            return render_template('auth/login.html', form=form,
+                                   error='Dear admin! User is not exists')
+        elif not user.validate_password(form.password.data):
+            return render_template('auth/login.html', form=form,
+                                   error='Dear admin! invalid password')
+        else:
+            login_user(user)
+            return redirect(url_for('home'))
+    return render_template('auth/login.html', form=form)
 
 @auth_app.route('/logout/', endpoint='logout')
 @login_required # доступ только для авторизованных

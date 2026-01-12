@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
 
     username: so.Mapped[str] = so.mapped_column(sa.String(20), unique=True, nullable=False)
 
-    name: so.Mapped[str] = so.mapped_column(sa.String(30), nullable=False, default='no name', server_default='no name')
+    first_name: so.Mapped[str] = so.mapped_column(sa.String(30), nullable=False, default='no name', server_default='no name')
 
     last_name: so.Mapped[str] = so.mapped_column(sa.String(50),
                                                  unique=False,
