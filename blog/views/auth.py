@@ -65,8 +65,6 @@ def login_as():
 
 @auth_app.route('/', methods=['POST', 'GET'], endpoint='login')
 def login():
-
-
     form = LoginForm(request.form)
     if request.method == 'POST':
         user = User.query.filter_by(username=form.username.data).one_or_none()

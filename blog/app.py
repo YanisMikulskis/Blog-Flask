@@ -74,8 +74,10 @@ def _add_context_processor(app):
         Для подсветки пунктов меню, если мы на текущей странице
         '''
         nav_items = [
-            {'endpoint': 'home', 'label': 'Home'},
-            {'endpoint': 'my_page', 'label': 'My page'},
+            {'endpoint': 'home',
+             'label': 'Home'},
+            {'endpoint': 'my_page',
+             'label': 'My page'},
             {
                 'endpoint': 'users_app.list',
                 'label': 'Users',
@@ -86,7 +88,8 @@ def _add_context_processor(app):
                 'endpoint': 'articles_app.list',
                 'label': 'Articles',
                 'active_endpoints': ['articles_app.list',
-                                     'articles_app.details']
+                                     'articles_app.details',
+                                     'articles_app.create']
             },
             {
                 'endpoint': 'auth_app.login',
