@@ -68,7 +68,7 @@ def create_users_command():
                 user = User(username='admin', is_staff = True)
                 user.password = '1'
             else:
-                user = User(username = name_user, name = f'{name_user} human')
+                user = User(username = name_user, first_name = f'{name_user} human')
                 user.password='1'
 
             db.session.add(user)

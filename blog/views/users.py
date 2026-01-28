@@ -27,7 +27,7 @@ def user_details(user_id: int):
     #     select_user = USERS[user_id]
     # except KeyError:
     #     raise NotFound(f'User not found')
-    # return render_template('users/details.html',
+    # return render_template('users/details_articles.html',
     #                        user_id=user_id, user_name=select_user)
 
 

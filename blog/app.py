@@ -3,6 +3,7 @@ from flask import Flask, render_template, redirect, url_for
 from .views.users import users_app
 from .views.articles import articles_app
 from .views.auth import auth_app
+from .views.authors import authors_app
 
 from .commands import (create_users_command,
                        drop_db_command,
@@ -73,8 +74,10 @@ def _add_context_processor(app):
         Для подсветки пунктов меню, если мы на текущей странице
         '''
         nav_items = [
-            {'endpoint': 'home', 'label': 'Home'},
-            {'endpoint': 'my_page', 'label': 'My page'},
+            {'endpoint': 'home',
+             'label': 'Home'},
+            {'endpoint': 'my_page',
+             'label': 'My page'},
             {
                 'endpoint': 'users_app.list',
                 'label': 'Users',
@@ -85,7 +88,8 @@ def _add_context_processor(app):
                 'endpoint': 'articles_app.list',
                 'label': 'Articles',
                 'active_endpoints': ['articles_app.list',
-                                     'articles_app.details']
+                                     'articles_app.details',
+                                     'articles_app.create']
             },
             {
                 'endpoint': 'auth_app.login',
@@ -104,6 +108,11 @@ def _add_context_processor(app):
                 'endpoint': 'auth_app.register',
                 'label': 'Register',
                 'active_endpoint': 'auth_app.register'
+            },
+            {
+                'endpoint': 'authors_app.list',
+                'label':'Authors',
+                'active_endpoint': 'authors_app.list'
             }
 
         ]
@@ -116,6 +125,7 @@ def _add_blueprints(app) -> None:
     # что мы кидаем в url_prefix
     app.register_blueprint(articles_app, url_prefix='/articles')
     app.register_blueprint(auth_app, url_prefix='/authentication')
+    app.register_blueprint(authors_app, url_prefix='/authors')
 
 
 def _add_commands(app) -> None:
