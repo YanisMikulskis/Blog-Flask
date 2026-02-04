@@ -9,7 +9,8 @@ from .commands import (create_users_command,
                        drop_db_command,
                        check_db,
                        create_admin,
-                       delete_admin)
+                       delete_admin,
+                       create_tags)
 
 from .extension import login_manager, db, migrate
 
@@ -136,4 +137,5 @@ def _add_commands(app) -> None:
     app.cli.add_command(check_db)
     app.cli.add_command(create_admin)
     app.cli.add_command(delete_admin)
+    app.cli.add_command(create_tags)
 app = create_app()

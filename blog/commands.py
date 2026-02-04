@@ -97,3 +97,16 @@ def check_db():
     print(f'nаблы = {User.query.all()}')
 
 
+@click.command('create-tags')
+@with_appcontext
+def create_tags():
+    '''
+    flask create-tags
+    '''
+    from blog.models import Tag
+
+    for tag_name in ['flask', 'django', 'python', 'sqlalchemy', 'news']:
+        tag = Tag(name=tag_name)
+        db.session.add(tag)
+    db.session.commit()
+    print(f'теги созданы!')
