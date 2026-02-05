@@ -56,10 +56,7 @@ def create_articles():
     form = CreateArticleForm(request.form)
     form.tags_form.choices = [(tag.id, tag.name) for tag in Tag.query.order_by('name')]
     if request.method == 'POST' and form.validate_on_submit():
-        if form.tags_form.data:
-            selected_tags = Tag.query.filter(Tag.id.in_(form.tags_form.data))
-            for tag in selected_tags:
-                Article.tags.append(tag)
+
 
         author = current_user.author
         if author is None:
@@ -70,6 +67,12 @@ def create_articles():
         article = Article(title=form.title_form.data.strip(),
                           body=form.body_form.data,
                           author = author)
+
+        if form.tags_form.data:
+            selected_tags = Tag.query.filter(Tag.id.in_(form.tags_form.data))
+            for tag in selected_tags:
+                article.tags.append(tag)
+
         print(f'article = {article}')
         db.session.add(article)
         try:
