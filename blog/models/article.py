@@ -10,6 +10,8 @@ from blog.extension import db
 
 from sqlalchemy import func
 from datetime import datetime, timezone
+
+from .article_tag import article_tag_association_table
 class Article(db.Model):
     __tablename__ = 'articles'
     id: so.Mapped[int] = so.mapped_column(primary_key=True, autoincrement=True)
@@ -25,3 +27,7 @@ class Article(db.Model):
     dt_updated: so.Mapped[DateTime] = so.mapped_column(sa.DateTime(timezone=True),
                                                        default=lambda: datetime.now(timezone.utc),
                                                        onupdate=lambda: datetime.now(timezone.utc))
+    tags = relationship('Tag',
+                        secondary=article_tag_association_table,
+                        back_populates='articles',
+                        )

@@ -1,4 +1,4 @@
-import sqlalchemy as sa
+
 import sqlalchemy.orm as so
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import relationship

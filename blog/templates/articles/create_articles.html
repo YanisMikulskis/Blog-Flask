@@ -18,7 +18,7 @@ Create article
         {{ form.csrf_token }}
 
 
-        {% for field_name in ['title_form', 'body_form'] %}
+        {% for field_name in ['title_form', 'body_form','tags_form'] %}
         {% set field = form[field_name] %}
         <div class="my-3">
             {{ field.label(class='form-label') }}

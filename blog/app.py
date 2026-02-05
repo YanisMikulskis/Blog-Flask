@@ -4,12 +4,14 @@ from .views.users import users_app
 from .views.articles import articles_app
 from .views.auth import auth_app
 from .views.authors import authors_app
+from .views.tags import tags_app
 
 from .commands import (create_users_command,
                        drop_db_command,
                        check_db,
                        create_admin,
-                       delete_admin)
+                       delete_admin,
+                       create_tags)
 
 from .extension import login_manager, db, migrate
 
@@ -113,6 +115,11 @@ def _add_context_processor(app):
                 'endpoint': 'authors_app.list',
                 'label':'Authors',
                 'active_endpoint': 'authors_app.list'
+            },
+            {
+                'endpoint': 'tags_app.list',
+                'label': 'Tags',
+                'active_endpoint': 'tags_app.list'
             }
 
         ]
@@ -126,6 +133,7 @@ def _add_blueprints(app) -> None:
     app.register_blueprint(articles_app, url_prefix='/articles')
     app.register_blueprint(auth_app, url_prefix='/authentication')
     app.register_blueprint(authors_app, url_prefix='/authors')
+    app.register_blueprint(tags_app, url_prefix ='/tags')
 
 
 def _add_commands(app) -> None:
@@ -136,4 +144,5 @@ def _add_commands(app) -> None:
     app.cli.add_command(check_db)
     app.cli.add_command(create_admin)
     app.cli.add_command(delete_admin)
+    app.cli.add_command(create_tags)
 app = create_app()
