@@ -1,20 +1,17 @@
 from flask import Flask, render_template, redirect, url_for
-
+from blog.admin import admin
 from .views.users import users_app
 from .views.articles import articles_app
 from .views.auth import auth_app
 from .views.authors import authors_app
 from .views.tags import tags_app
-
 from .commands import (create_users_command,
                        drop_db_command,
                        check_db,
                        create_admin,
                        delete_admin,
                        create_tags)
-
 from .extension import login_manager, db, migrate
-
 from .security import flask_bcrypt
 
 
@@ -26,11 +23,13 @@ from check_docker import is_docker
 
 def create_app() -> Flask:
     app = Flask(__name__) # экземпляр приложения
+    admin.init_app(app)
     if not is_docker:
         cfg_name = 'DevConfig'
     else:
         cfg_name = os.environ.get('CONFIG_NAME')
     app.config.from_object(f'blog.configs.{cfg_name}')
+
 
     _add_extensions(app)
     _add_base_route(app)
