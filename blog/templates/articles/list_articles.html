@@ -1,30 +1,26 @@
 {% extends 'base.html' %}
 
 {% block title %}
-Articles list
+    Articles list
 {% endblock %}
 
 
 {% block body %}
     <h1>Articles</h1>
-        <div>
-        <ul>
+    <div>
         {% if current_user.is_authenticated %}
             {% for article in articles %}
-            <li>
-                <a href="{{ url_for('articles_app.details', article_id=article.id) }}">
-                {{ article.title }}
-                </a>
-                by {{ article.author.user.username }}
-            </li>
-
+                <li>
+                    <a href="{{ url_for('articles_app.details', article_id=article.id) }}">
+                        {{ article.title }}
+                    </a>
+                    by {{ article.author.user.username }}
+                </li>
             {% endfor %}
-
-        </ul>
             <a href="{{ url_for('articles_app.create') }}">Create new</a>
             <hr>
-        </div>
-    {% else %}
-    <h5>Зарегистрируйтесь, чтобы просматривать статьи и создавать свои!</h5>
-    {% endif %}
+        {% else %}
+            <h3>Зарегистрируйтесь, чтобы просматривать статьи и создавать свои!</h3>
+        {% endif %}
+    </div>
 {% endblock %}

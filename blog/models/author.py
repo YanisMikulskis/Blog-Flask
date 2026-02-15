@@ -17,3 +17,6 @@ class Author(db.Model):
         user_name = User.query.filter_by(id=self.user_id).one_or_none()
         return (f'Статья Автора {self.id} на Юзере'
                 f' {self.user_id}, он же {user_name}')
+
+    def __str__(self):
+        return self.user.username
