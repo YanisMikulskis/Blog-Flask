@@ -19,6 +19,12 @@ import os
 
 from check_docker import is_docker
 
+#блупринты для api
+from flask_smorest import Api
+from .api.tag_api import tags_api_blp
+from .api.article_api import article_api_blp
+from .api.author_api import author_api_blp
+from .api.user_api import user_api_blp
 
 
 def create_app() -> Flask:
@@ -36,6 +42,7 @@ def create_app() -> Flask:
     _add_context_processor(app)
     _add_blueprints(app)
     _add_commands(app)
+    _add_api(app)
     return app
 
 
@@ -135,6 +142,7 @@ def _add_blueprints(app) -> None:
     app.register_blueprint(tags_app, url_prefix ='/tags')
 
 
+
 def _add_commands(app) -> None:
 # вызов команд из commands
 #     app.cli.add_command(init_db_command)
@@ -144,4 +152,15 @@ def _add_commands(app) -> None:
     app.cli.add_command(create_admin)
     app.cli.add_command(delete_admin)
     app.cli.add_command(create_tags)
+
+def _add_api(app):
+    app.config['API_TITLE'] = 'Blog API'
+    app.config['API_VERSION'] = 'V1'
+    app.config['OPENAPI_VERSION'] = '3.0.3'
+    api = Api(app)
+
+    api.register_blueprint(tags_api_blp, url_prefix = '/tag_api')
+    api.register_blueprint(article_api_blp, url_prefix='/article_api')
+    api.register_blueprint(author_api_blp, url_prefix='/author_api')
+    api.register_blueprint(user_api_blp, url_prefix='/user_api')
 app = create_app()
