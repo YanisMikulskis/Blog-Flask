@@ -1,6 +1,8 @@
 
 import sqlalchemy as sa
+
 import sqlalchemy.orm as so
+
 from sqlalchemy.orm import relationship
 
 from blog.extension import db

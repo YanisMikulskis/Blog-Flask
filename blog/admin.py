@@ -1,7 +1,7 @@
 import typing as t
 from flask import redirect, url_for
 from flask_admin import Admin, AdminIndexView, expose
-from flask_admin.theme import Bootstrap4Theme
+# from flask_admin.theme import Bootstrap4Theme
 from flask_admin.contrib.sqla import ModelView
 from flask_login import current_user
 from . import models
@@ -29,7 +29,7 @@ class MyAdminIndexView(AdminIndexView):
 
 admin = Admin(name='Blog Admin',
               index_view=MyAdminIndexView(),
-              theme=Bootstrap4Theme())
+           )
 
 # admin.add_view(CustomView(models.Tag, db.session, category='Models'))
 admin.add_view(CustomView(models.Article, db.session, category='Models'))
