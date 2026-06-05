@@ -5,7 +5,6 @@ from flask_smorest import Blueprint
 from flask.views import MethodView
 
 
-
 tags_api_blp = Blueprint('tag_api', 'tag_api')
 # экземпляр класса Блупринта создаем на месте (сразу перед использвоание в роутах)
 @tags_api_blp.route('/')

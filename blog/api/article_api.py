@@ -4,6 +4,9 @@ from blog.schemas.article_schema import ArticleSchema
 from flask_smorest import Blueprint
 from flask.views import MethodView
 
+
+
+
 article_api_blp = Blueprint('article_api', 'article_api')
 
 @article_api_blp.route('/')
